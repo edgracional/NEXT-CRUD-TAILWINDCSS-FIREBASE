@@ -3,6 +3,7 @@ import Formulario from '../components/Formulario';
 import Layout from './../components/Layout';
 import Tabela from './../components/Tabela';
 import Cliente from './../core/Cliente';
+import { useState } from 'react';
 
 
 export default function Home() {
@@ -22,6 +23,14 @@ function clienteExcluido(cliente: Cliente) {
 
 }
 
+function salvarCliente(cliente: Cliente){
+
+}
+
+/* Criar um estado - definir um useStade com dois possíveis estados
+e como padrão iniciara como tabela */
+const [visivel, setVisivel] = useState<'tabela' | 'form'>('tabela')
+
   return (
 
     <div className={`
@@ -29,18 +38,34 @@ function clienteExcluido(cliente: Cliente) {
       bg-gradient-to-r from-purple-500 to-blue-600
       text-white
     `}>
+
       <Layout titulo="Cadastro Simples">
+        {/* colcoar um renderização opcional */}
+        {visivel === 'tabela' ? (
+          
+        /* colocar o botão e tabela dentro de um fragmento <> </> */
+        <>
         <div className='flex justify-end'>
-        <Botao cor="green" className='mb-4'>Novo Cliente</Botao>
+          <Botao cor="green" className='mb-4'
+            onClick={() => setVisivel('form')}>
+            Novo Cliente
+          </Botao>
         </div>
           
-         <Tabela clientes={clientes}
-            clienteSelecionado={clienteSelecionado}
-            clienteExcluido={clienteExcluido}
-         />
+          <Tabela clientes={clientes}
+              clienteSelecionado={clienteSelecionado}
+              clienteExcluido={clienteExcluido}
+        />
+        </>
 
-          <Formulario cliente={clientes[2]}></Formulario>
-          
+        ) : ( 
+          <Formulario 
+            cliente={clientes[2]}
+            clienteMudou={salvarCliente}
+            cancelado={() => setVisivel('tabela')}
+          />
+        )}
+
       </Layout>
     </div>
   )
