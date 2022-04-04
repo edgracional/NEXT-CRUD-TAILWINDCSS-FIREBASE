@@ -22,10 +22,10 @@ export default class ColecaoCliente implements ClienteRepositorio {
 
    async salvar(cliente: Cliente): Promise<Cliente> {
        if(cliente?.id) {
-           await this.#colecao().doc(cliente.id).set(cliente)
+           await this.colecao().doc(cliente.id).set(cliente)
            return cliente
        } else {
-           const docRef = await this.#colecao().add(cliente)
+           const docRef = await this.colecao().add(cliente)
            const doc = await docRef.get()
            return doc.data()
        }
@@ -34,16 +34,16 @@ export default class ColecaoCliente implements ClienteRepositorio {
    }
 
    async excluir(cliente: Cliente): Promise<void> {
-       return this.#colecao().doc(cliente.id).delete()
+       return this.colecao().doc(cliente.id).delete()
      
    }
    async obterTodos(): Promise<Cliente[]> {
-       const query = await this.#colecao().get()
+       const query = await this.colecao().get()
        return query.docs.map(doc => doc.data()) ?? []
      
    }
 
-   #colecao() {
+   private colecao(): any {
        return firebase
             .firestore().collection('clientes')
             .whithConverter(this.#conversor)
